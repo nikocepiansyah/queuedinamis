@@ -1,0 +1,128 @@
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+
+
+typedef struct{
+	char nomeja[10];
+	char pemesan[20];
+	char makanan[30];
+	int harga;
+}daftarmakan;
+
+typedef struct elm *alamatelmt;
+
+typedef struct elm{
+	daftarmakan elmt;
+	alamatelmt next;	
+}elemen;
+
+//Mendeklarasikan Queue
+typedef struct{
+	elemen *first;
+	elemen *last;
+}queue;
+
+//Mendeklarasikan Prosedur is Empty
+void createEmpty(queue *Q){
+	(*Q).first=NULL;
+	(*Q).last=NULL;
+}
+
+//Mendeklarasikan IS Empty
+int isEmpty(queue Q){
+	int hasil = 0;
+	if(Q.first == NULL){
+		hasil = 1;
+	}
+	return hasil;
+}
+
+//CountElement
+int countElement(queue Q){
+	int hasil =1;
+	if(Q.first != NULL){
+		elemen* elmt;
+		elmt= Q.first;
+		
+		while(elmt != NULL){
+			hasil = hasil+1;
+			elmt = elmt->next;
+		}
+	}
+	return hasil;
+}
+
+void add(char nomeja[],char pemesan[],char makanan[], int harga, queue *Q){
+	elemen *elmt;
+	elmt= (elemen *) malloc (sizeof (elemen));
+	strcpy(elmt->elmt.nomeja, nomeja);
+	strcpy(elmt->elmt.pemesan, pemesan);
+	strcpy(elmt->elmt.makanan, makanan);
+	elmt->elmt.harga = harga;
+	elmt->next= NULL;
+	if((*Q).first==NULL){
+		(*Q).first=elmt;
+	}else{
+		(*Q).last->next=elmt;
+	}
+	(*Q).last=elmt;
+	elmt=NULL;
+}
+
+void del(queue *Q){
+		int j;
+		for(j=0;j<5;j++){
+		printf("Pelanggan %d Telah di Layani\n", j+1);	
+		}
+	if((*Q).first != 0){
+		elemen*elmt=(*Q).first;
+		(*Q).first=(*Q).first->next;
+		elmt->next=NULL;
+		free(elmt);
+	}
+}
+
+void printQueue(queue Q){
+	if(Q.first != NULL){
+		printf("  Daftar Pesanan \n");
+		elemen *elmt= Q.first;
+		int i=1;
+		
+		while(elmt !=NULL){
+			printf(" ===================== \n");
+			printf(" Pesanan ke : %d\n",i);
+			printf(" No Meja : %s\n",elmt->elmt.nomeja);
+			printf(" Nama Pemesan : %s\n",elmt->elmt.pemesan);
+			printf(" Pesanan : %s\n",elmt->elmt.makanan);
+			printf(" Harga : %d\n", elmt->elmt.harga);
+			elmt=elmt->next;
+			i = i+1;
+		
+		}	
+		
+	}else{
+		printf(" Tidak Ada Pesanan \n");
+	}
+	
+}
+
+int main(int argc, char *argv[]){
+	queue Q;
+	createEmpty(&Q);
+	printQueue(Q);
+	printf(" ===================== \n");
+	add("1","Kukis","Ayam",20000,&Q);
+	add("2","Azmi","Seblak",10000,&Q);
+	add("3","Tupik","Cireng",5000,&Q);
+	add("4","Opik","Cimin",5000,&Q);
+	add("5","Pahrul","Baso",25000,&Q);
+	printQueue(Q);
+	printf(" ===================== \n");
+	del(&Q);
+	printQueue(Q);
+	printf(" ===================== \n");
+	
+	
+	return 0;
+}
